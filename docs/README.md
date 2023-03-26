@@ -6,7 +6,11 @@ An AI assistant Discord bot powered by OpenAI's GPT-3.5 model.
 - OpenAI's Chat API
 
 ## Usage
-<Usage Instructions>
+Set Environment Variables as follows:
+```
+OPENAI_API_KEY='your_openai_api_key_here'
+DISCORD_BOT_TOKEN='your_discord_bot_secret_here'
+```
 
 ## Contact
 <Remove this section for unmaintained projects>

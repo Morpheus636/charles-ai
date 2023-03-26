@@ -6,6 +6,8 @@ authors = ["Josh Levin <morpheus636@morpheus636.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+openai = "^0.27.2"
+discord-py = "^2.2.2"
 
 [tool.poetry.dev-dependencies]
 black = "^22.2.0"
