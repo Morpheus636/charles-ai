@@ -22,7 +22,8 @@ async def on_message(message):
         return
 
     if isinstance(message.channel,discord.DMChannel):
-        await message.reply(ai_engine.ask(message.content))
+        if not message.content.startswith("?"):
+            await message.reply(ai_engine.ask(message.content))
 
 def start():
     client.run(os.getenv("DISCORD_BOT_TOKEN"))

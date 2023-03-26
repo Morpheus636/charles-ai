@@ -23,7 +23,7 @@ def setup():
 
 
 def ask(message: str) -> str:
-    """
+    """Adds the message to the conversation and gets a response from the AI.
 
     :param message: String, the message from the user
     :return: String, the response from OpenAI
@@ -36,6 +36,7 @@ def ask(message: str) -> str:
             {"role": "user", "content": message}
         ]
     )
+    # TODO - add additional context to AI requests.
 
     return response['choices'][0]['message']['content']
 
