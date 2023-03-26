@@ -1,0 +1,35 @@
+# https://betterprogramming.pub/create-a-private-postgresql-database-for-your-development-environment-in-seconds-b781640ed01b
+version: "3.3"
+services:
+  postgres:
+    image: postgres:9.6.12-alpine
+    container_name: local-postgres
+    volumes:
+      # SQL files that PG will use to initialize the database.
+      - "./docker_pgsql_init:/docker-entrypoint-initdb.d"
+      # Persistent DB storage.
+      - "./docker_pgsql_volume:/var/lib/postgresql/data"
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: local-pgadmin
+    volumes:
+      - ${PWD}/servers.json:/pgadmin4/servers.json
+    ports:
+      - 8080:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3

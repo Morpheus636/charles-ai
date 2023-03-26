@@ -1,0 +1,32 @@
+
+name: Tests
+
+on:
+  push:
+    branches: [ main, release/** ]
+  pull_request:
+    branches: [ main, release/** ]
+
+jobs:
+  tests:
+    runs-on: ${{ matrix.os}}
+    strategy:
+      matrix:
+        os: [[ubuntu-latest], [windows-latest], [macos-latest]]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.10'
+
+      - name: Setup Poetry
+        uses: Gr1N/setup-poetry@v7
+
+      - name: Install Packages
+        run: poetry install
+
+      - name: PyTest
+        run: poetry run pytest
