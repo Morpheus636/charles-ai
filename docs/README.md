@@ -6,10 +6,16 @@ An AI assistant Discord bot powered by OpenAI's GPT-3.5 model.
 - OpenAI's Chat API
 
 ## Usage
-Set Environment Variables as follows:
+### Mandatory Environment Variables
 ```
 OPENAI_API_KEY='your_openai_api_key_here'
 DISCORD_BOT_TOKEN='your_discord_bot_secret_here'
+ALLOWED_USER_ID='your_discord_user_id_here'
+AI_USER_INFO'A system prompt for the AI explaining who you are. Keep this short as it counts towards your tokens on every single message.'
+```
+### Optional Environment Variables
+```
+AI_NAME='your_ai_name_here
 ```
 
 ## Contact
