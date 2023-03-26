@@ -14,3 +14,5 @@ def validate_env():
         raise KeyError("Missing required environment variable: DISCORD_BOT_TOKEN")
     if not os.getenv("ALLOWED_USER_ID"):
         raise KeyError("Missing required environment variable: ALLOWED_USER_ID")
+    if not os.getenv("AI_USER_INFO"):
+        raise KeyError("Missing required environment variable: AI_USER_INFO")
