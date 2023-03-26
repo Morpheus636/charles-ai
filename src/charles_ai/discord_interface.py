@@ -20,6 +20,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    """Event handler for DMs to the bot."""
     # Don't have the bot reply to itself.
     if message.author == client.user:
         return
@@ -27,6 +28,16 @@ async def on_message(message):
     if isinstance(message.channel, discord.DMChannel):
         if not message.content.startswith("?"):
             await message.reply(ai_engine.ask(message.content))
+
+
+@client.event
+async def on_reaction_add(reaction, user):
+    """Event handler for reactions to the bot."""
+    if isinstance(reaction.message.channel, discord.DMChannel):
+        if reaction.message.author != client.user:
+            # Clear the conversation history if the user reacts with :thumbsup:
+            if reaction.emoji.name == "👍":
+                ai_engine.conversation = []
 
 
 def start():

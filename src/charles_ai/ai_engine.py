@@ -22,16 +22,32 @@ def setup():
     user_info_prompt["content"] = os.getenv("AI_USER_INFO")
 
 
-def ask(message: str) -> str:
+def ask(new_message: str) -> str:
     """Adds the message to the conversation and gets a response from the AI.
 
     :param message: String, the message from the user
     :return: String, the response from OpenAI
     """
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[initial_prompt, user_info_prompt, {"role": "user", "content": message}],
-    )
-    # TODO - add additional context to AI requests.
+    # Message history algorythm.
+    # Note that the user can also manually reset the history by adding a thumbs up reaction.
+    messages = [initial_prompt, user_info_prompt]
+    for i in range(0, 10):
+        index = len(conversation) - 1 - i
+        if index >= 0:
+            message = conversation[index]
+            if message:
+                messages.append(message)
+                print(message)
+    messages.append({"role": "user", "content": new_message})
 
-    return response["choices"][0]["message"]["content"]
+    # API request.
+    api_response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=messages,
+    )
+
+    # Save state and return
+    response = api_response["choices"][0]["message"]["content"]
+    conversation.append({"role": "user", "content": new_message})
+    conversation.append({"role": "assistant", "content": response})
+    return response
