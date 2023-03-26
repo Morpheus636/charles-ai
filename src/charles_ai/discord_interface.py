@@ -15,7 +15,7 @@ client = discord.Client(intents=intents)
 async def on_ready():
     """Event handler for bot coming online. DMs the allowed user that it is ready."""
     user = await client.fetch_user(os.getenv("ALLOWED_USER_ID"))
-    await user.send("I am online and ready to assist you!")
+    await user.send("Systems are now fully operational.")
 
 
 @client.event
