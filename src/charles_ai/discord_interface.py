@@ -25,9 +25,30 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    # Ensure the bot only replies to authorized users.
+    if not message.author.id == int(os.getenv("ALLOWED_USER_ID")):
+        print(os.getenv("ALLOWED_USER_ID"))
+        print(message.author.id)
+        await message.reply(
+            "I am unable to assist you. If this is a mistake, you need to add your user ID in the `ALLOWED_USER_ID` environment variable on my server."
+        )
+        return
+
     if isinstance(message.channel, discord.DMChannel):
+        # Non-command: AI conversation
         if not message.content.startswith("?"):
             await message.reply(ai_engine.ask(message.content))
+
+        # Clear command
+        elif message.content.startswith("?clear"):
+            args = message.content.split(" ")
+            if len(args) == 1:
+                limit = 200
+            else:
+                limit = int(args[1])
+            async for msg in message.channel.history(limit=limit):
+                if msg.author == client.user:
+                    await msg.delete()
 
 
 @client.event
