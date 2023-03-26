@@ -15,7 +15,7 @@ AI_USER_INFO'A system prompt for the AI explaining who you are. Keep this short 
 ```
 ### Optional Environment Variables
 ```
-AI_NAME='your_ai_name_here
+AI_NAME='your_ai_name_here'
 ```
 
 ## Contact
