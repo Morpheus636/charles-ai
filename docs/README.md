@@ -15,7 +15,7 @@ This is highly recommended, because more messages in the context backlog means m
 > **Note**
 > Charles AI is still in development. The deployment documentation will improve as development progresses.
 
-The Charles AI Docker container is the recommended and supported deployment method.
+The Charles AI [Docker container](https://hub.docker.com/repository/docker/morpheus636/charles-ai/general) is the recommended and supported deployment method.
 
 Deploy the container with the following environment variables:
 
