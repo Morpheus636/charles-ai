@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "template"
+name = "charles_ai"
 version = "0.0.1"
 description = ""
 authors = ["Josh Levin <morpheus636@morpheus636.com>"]
