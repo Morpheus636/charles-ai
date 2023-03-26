@@ -1,8 +1,7 @@
-from . import discord_interface
-from . import ai_engine
-
 import dotenv
-from . import config
+
+from . import ai_engine, config, discord_interface
+
 
 # Load and validate config
 dotenv.load_dotenv()
