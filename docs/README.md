@@ -13,7 +13,6 @@ DISCORD_BOT_TOKEN='your_discord_bot_secret_here'
 ```
 
 ## Contact
-<Remove this section for unmaintained projects>
 To submit a bug report or feature request, please open a GitHub Issue in this repository. 
 
 To ask a question or get support, you can join my [Discord Server](https://discord.morpheus636.com) or create a Discussions thread within this repository.
