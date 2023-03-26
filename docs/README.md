@@ -6,14 +6,27 @@ An AI assistant Discord bot powered by OpenAI's GPT-3.5 model.
 - OpenAI's Chat API
 
 ## Usage
-### Mandatory Environment Variables
+1. Deploy an instance of the bot (see [Deployment](#Deployment) below for instructions)
+2. Send the bot a DM. The bot will remember up to 10 messages of context (5 back-and-forth interactions).
+3. When a conversation is finished, you can manually reset the message context backlog by reacting to the bot with a thumbs up.
+This is highly recommended, because more messages in the context backlog means more tokens are sent in each request.
+
+## Deployment
+> **Note**
+> Charles AI is still in development. The deployment documentation will improve as development progresses.
+
+The Charles AI Docker container is the recommended and supported deployment method.
+
+Deploy the container with the following environment variables:
+
+#### Mandatory Environment Variables
 ```
 OPENAI_API_KEY='your_openai_api_key_here'
 DISCORD_BOT_TOKEN='your_discord_bot_secret_here'
 ALLOWED_USER_ID='your_discord_user_id_here'
 AI_USER_INFO'A system prompt for the AI explaining who you are. Keep this short as it counts towards your tokens on every single message.'
 ```
-### Optional Environment Variables
+#### Optional Environment Variables
 ```
 AI_NAME='your_ai_name_here'
 ```
