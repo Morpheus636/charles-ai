@@ -27,8 +27,6 @@ async def on_message(message):
 
     # Ensure the bot only replies to authorized users.
     if not message.author.id == int(os.getenv("ALLOWED_USER_ID")):
-        print(os.getenv("ALLOWED_USER_ID"))
-        print(message.author.id)
         await message.reply(
             "I am unable to assist you. If this is a mistake, you need to add your user ID in the `ALLOWED_USER_ID` environment variable on my server."
         )
@@ -54,6 +52,9 @@ async def on_message(message):
 @client.event
 async def on_reaction_add(reaction, user):
     """Event handler for reactions to the bot."""
+    if not user.id == int(os.getenv("ALLOWED_USER_ID")):
+        return
+ 
     if isinstance(reaction.message.channel, discord.DMChannel):
         if reaction.message.author != client.user:
             # Clear the conversation history if the user reacts with :thumbsup:
