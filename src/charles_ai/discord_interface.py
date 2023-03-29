@@ -32,8 +32,9 @@ async def on_message(message):
         )
         return
 
+    # Only reply to DMs
     if isinstance(message.channel, discord.DMChannel):
-        # Non-command: AI conversation
+        # No prefix means it's not a command.
         if not message.content.startswith("?"):
             await message.reply(ai_engine.ask(message.content))
 
@@ -52,15 +53,16 @@ async def on_message(message):
 @client.event
 async def on_reaction_add(reaction, user):
     """Event handler for reactions to the bot."""
+    # Ensure only authorized users can clear history.
     if not user.id == int(os.getenv("ALLOWED_USER_ID")):
         return
- 
-    if isinstance(reaction.message.channel, discord.DMChannel):
-        if reaction.message.author != client.user:
-            # Clear the conversation history if the user reacts with :thumbsup:
-            if reaction.emoji.name == "👍":
-                ai_engine.conversation = []
+
+    # Clear conversation log if the user reacts to a DM from the bot with :thumbsup:
+    if isinstance(reaction.message.channel, discord.DMChannel) and reaction.message.author != client.user:
+        if reaction.emoji.name == "👍":
+            ai_engine.conversation = []
 
 
 def start():
+    """Blocking: Start the bot's async event loop."""
     client.run(os.getenv("DISCORD_BOT_TOKEN"))
