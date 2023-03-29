@@ -28,25 +28,25 @@ def ask(new_message: str) -> str:
     :param message: String, the message from the user
     :return: String, the response from OpenAI
     """
-    # Message history algorythm.
+    # Message history algorithm.
     # Note that the user can also manually reset the history by adding a thumbs up reaction.
     messages = [initial_prompt, user_info_prompt]
+    # Grab the most recent 10 items from the conversation history, if they exist.
     for i in range(0, 10):
         index = len(conversation) - 1 - i
         if index >= 0:
             message = conversation[index]
             if message:
                 messages.append(message)
-                print(message)
     messages.append({"role": "user", "content": new_message})
 
-    # API request.
+    # OpenAI API request.
     api_response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=messages,
     )
 
-    # Save state and return
+    # Save conversation history and return.
     response = api_response["choices"][0]["message"]["content"]
     conversation.append({"role": "user", "content": new_message})
     conversation.append({"role": "assistant", "content": response})
