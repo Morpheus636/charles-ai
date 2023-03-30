@@ -1,9 +1,7 @@
 import os
 
 
-ai_name = os.getenv("AI_NAME")
-if not ai_name:
-    ai_name = "Charles"
+ai_name = "Charles"
 
 
 def validate_env():
@@ -16,3 +14,9 @@ def validate_env():
         raise KeyError("Missing required environment variable: ALLOWED_USER_ID")
     if not os.getenv("AI_USER_INFO"):
         raise KeyError("Missing required environment variable: AI_USER_INFO")
+        
+    # Optional environment variables
+    env_ai_name = os.getenv("AI_NAME")
+    if env_ai_name:
+        global ai_name
+        ai_name = env_ai_name
