@@ -1,11 +1,14 @@
+import dotenv
+
 import os
 
 
 ai_name = "Charles"
 
 
-def validate_env():
-    """Ensures that all required environment variables are present, or throws an error if they are not."""
+def load():
+    """Loads a dotenv, then ensures that all required environment variables are present, or throws an error if they are not."""
+    dotenv.load_dotenv()
     if not os.getenv("OPENAI_API_KEY"):
         raise KeyError("Missing required environment variable: OPENAI_API_KEY")
     if not os.getenv("DISCORD_BOT_TOKEN"):
