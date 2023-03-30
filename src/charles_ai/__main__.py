@@ -1,5 +1,3 @@
-import dotenv
-
 from . import ai_engine, config, discord_interface
 
 
