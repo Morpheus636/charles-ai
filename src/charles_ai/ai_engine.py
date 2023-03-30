@@ -32,7 +32,7 @@ def ask(new_message: str) -> str:
     # Note that the user can also manually reset the history by adding a thumbs up reaction.
     messages = [initial_prompt, user_info_prompt]
     # Grab the most recent 10 items from the conversation history, if they exist.
-    for i in range(0, 10):
+    for i in range(0, 9):
         index = len(conversation) - 1 - i
         if index >= 0:
             message = conversation[index]
