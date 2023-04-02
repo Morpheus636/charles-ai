@@ -2,13 +2,11 @@ import os
 
 import openai
 
-from . import config
-
 
 # Data state for prompts.
-initial_prompt = {
+system_instruction = {
     "role": "system",
-    "content": f"You are {config.ai_name}, a helpful AI assistant developed by Morpheus636 and powered by OpenAI. Answer as concisely as possible.",
+    "content": "",
 }
 
 user_info_prompt = {"role": "system", "content": ""}
@@ -18,8 +16,15 @@ conversation = []
 
 def setup():
     """Sets up the AI, including API key and user info prompt. This function must be called before any other AI engine function."""
+    global system_instruction
+    global user_info_prompt
+
     openai.api_key = os.getenv("OPENAI_API_KEY")
     user_info_prompt["content"] = os.getenv("AI_USER_INFO")
+
+    # Load system instruction
+    with open("src/charles_ai/system_instruction.txt", "r") as file:
+        system_instruction["content"] = file.read()
 
 
 def ask(new_message: str) -> str:
@@ -28,9 +33,10 @@ def ask(new_message: str) -> str:
     :param message: String, the message from the user
     :return: String, the response from OpenAI
     """
+    global conversation
     # Message history algorithm.
     # Note that the user can also manually reset the history by adding a thumbs up reaction.
-    messages = [initial_prompt, user_info_prompt]
+    messages = [system_instruction, user_info_prompt]
     # Grab the most recent 10 items from the conversation history, if they exist.
     for i in range(0, 9):
         index = len(conversation) - 1 - i
