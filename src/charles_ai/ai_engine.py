@@ -1,6 +1,9 @@
+import json
 import os
 
 import openai
+
+from . import plugin_api
 
 
 # Data state for prompts.
@@ -24,7 +27,12 @@ def setup():
 
     # Load system instruction
     with open("src/charles_ai/system_instruction.txt", "r") as file:
-        system_instruction["content"] = file.read()
+        system_instruction["content"] = (
+            file.read()
+            + "\n```\n"
+            + json.dumps({"plugins": plugin_api.get_plugin_specs()})
+            + "\n```"
+        )
 
 
 def ask(new_message: str) -> str:
@@ -52,8 +60,12 @@ def ask(new_message: str) -> str:
         messages=messages,
     )
 
-    # Save conversation history and return.
+    # Save conversation history.
     response = api_response["choices"][0]["message"]["content"]
     conversation.append({"role": "user", "content": new_message})
     conversation.append({"role": "assistant", "content": response})
+
+    # If it's a plugin request, call ask() recursively. Otherwise, return.
+    response = plugin_api.process_request(response)
+
     return response

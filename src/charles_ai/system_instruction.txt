@@ -15,12 +15,3 @@ respond using the following JSON schema. Don't acknowledge the JSON response, on
 ```
 
 You have access to the following plugins, and only the following plugins:
-
-```
-{
-    "plugins":[
-        {"plugin":"weather", "description:"", "args":["location", "time"]}
-
-    ]
-}
-```
