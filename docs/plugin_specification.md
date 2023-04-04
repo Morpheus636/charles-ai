@@ -9,4 +9,6 @@ The following must be defined within that module's global namespace:
   - `plugin`: String, the name of the plugin
   - `description`: String, a description of what the plugin does.
   - `args`: Dictionary, where keys are the name of each paramenter and values are a description of the parameter.
-- `func` `run()`: The function to run when a request is made for the plugin. Must accept `**kwargs` as defined in the `spec.args` dictionary.
+- `func` `run()`: The function to run when a request is made for the plugin.
+  - Must accept `**kwargs` as defined in the `spec.args` dictionary.
+  - Must return a string, which will be returned to the AI model as a system message.
