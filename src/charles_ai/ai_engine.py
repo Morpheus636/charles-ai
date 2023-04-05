@@ -61,11 +61,16 @@ def ask(new_message: str) -> str:
     )
 
     # Save conversation history.
+    # TODO - garbage-collect/remove old conversation history.
     response = api_response["choices"][0]["message"]["content"]
     conversation.append({"role": "user", "content": new_message})
     conversation.append({"role": "assistant", "content": response})
 
-    # If it's a plugin request, call ask() recursively. Otherwise, return.
-    response = plugin_api.process_request(response)
-
-    return response
+    # Attempt to process the response as a plugin request, then recursively
+    # call ask() until the response is not a request for a plugin
+    # and return the final response. PluginParserError is raised if the request
+    # is not for the plugin API.
+    try:
+        return ask(plugin_api.process_request(response))
+    except plugin_api.parser.PluginParserError:
+        return response
