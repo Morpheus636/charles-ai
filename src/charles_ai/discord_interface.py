@@ -1,8 +1,12 @@
+import logging
 import os
 
 import discord
 
 from . import ai_engine
+
+
+logger = logging.getLogger(__name__)
 
 
 # Setup discord client
@@ -14,6 +18,7 @@ client = discord.Client(intents=intents)
 @client.event
 async def on_ready():
     """Event handler for bot coming online. DMs the allowed user that it is ready."""
+    logger.info("Discord Interface Ready")
     user = await client.fetch_user(os.getenv("ALLOWED_USER_ID"))
     await user.send("Systems are now fully operational.")
 
@@ -34,6 +39,10 @@ async def on_message(message):
 
     # Only reply to DMs
     if isinstance(message.channel, discord.DMChannel):
+        logger.debug(
+            f"Received message: {message.content} from user: {message.author.id} in channel {message.channel.id}"
+        )
+
         # No prefix means it's not a command.
         if not message.content.startswith("?"):
             await message.reply(ai_engine.ask(message.content))
@@ -58,8 +67,12 @@ async def on_reaction_add(reaction, user):
         return
 
     # Clear conversation log if the user reacts to a DM from the bot with :thumbsup:
-    if isinstance(reaction.message.channel, discord.DMChannel) and reaction.message.author != client.user:
+    if (
+        isinstance(reaction.message.channel, discord.DMChannel)
+        and reaction.message.author != client.user
+    ):
         if reaction.emoji.name == "👍":
+            logger.debug("Received thumbsup reaction. Clearing queue.")
             ai_engine.conversation = []
 
 

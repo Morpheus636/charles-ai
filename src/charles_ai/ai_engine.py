@@ -1,9 +1,13 @@
 import json
+import logging
 import os
 
 import openai
 
 from . import plugin_api
+
+
+logger = logging.getLogger(__name__)
 
 
 # Data state for prompts.
@@ -19,6 +23,7 @@ conversation = []
 
 def setup():
     """Sets up the AI, including API key and user info prompt. This function must be called before any other AI engine function."""
+    logger.info("Setting up AI angine.")
     global system_instruction
     global user_info_prompt
 
@@ -33,6 +38,7 @@ def setup():
             + json.dumps({"plugins": plugin_api.get_plugin_specs()})
             + "\n```"
         )
+    logger.info("Finished setting up AI engine.")
 
 
 def ask(new_message: str) -> str:
@@ -41,6 +47,7 @@ def ask(new_message: str) -> str:
     :param message: String, the message from the user
     :return: String, the response from OpenAI
     """
+    logger.debug(f"Message received by AI engine: {new_message}")
     global conversation
     # Message history algorithm.
     # Note that the user can also manually reset the history by adding a thumbs up reaction.
@@ -53,6 +60,7 @@ def ask(new_message: str) -> str:
             if message:
                 messages.append(message)
     messages.append({"role": "user", "content": new_message})
+    logger.debug(f"Sending API request with messages: {messages}")
 
     # OpenAI API request.
     api_response = openai.ChatCompletion.create(
@@ -63,6 +71,8 @@ def ask(new_message: str) -> str:
     # Save conversation history.
     # TODO - garbage-collect/remove old conversation history.
     response = api_response["choices"][0]["message"]["content"]
+    logger.debug(f"Receive response from API: {response}")
+    logger.debug("Saving message history to queue.")
     conversation.append({"role": "user", "content": new_message})
     conversation.append({"role": "assistant", "content": response})
 
@@ -71,6 +81,8 @@ def ask(new_message: str) -> str:
     # and return the final response. PluginParserError is raised if the request
     # is not for the plugin API.
     try:
+        logger.debug("Checking if request is for plugin API.")
         return ask(plugin_api.process_request(response))
     except plugin_api.parser.PluginParserError:
+        logger.debug("Message not for plugin API.")
         return response

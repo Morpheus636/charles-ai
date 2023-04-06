@@ -1,3 +1,5 @@
+import logging
+
 from . import parser
 from .plugin_modules import plugin_datetime, plugin_weather
 
@@ -5,10 +7,15 @@ from .plugin_modules import plugin_datetime, plugin_weather
 plugins = [plugin_datetime, plugin_weather]
 
 
+logger = logging.getLogger(__name__)
+
+
 def get_plugin_specs():
     """Gets a list of all the plugin spec dicts."""
+    logging.debug("Getting all plugin specs")
     plugin_specs = []
     for plugin in plugins:
+        logger.debug(f"Found spec: {plugin.spec}")
         plugin_specs.append(plugin.spec)
 
 
@@ -19,11 +26,14 @@ def process_request(request: str) -> str:
     :return: string, the output from the appropriate plugin.
     :raises: parser.PluginParserError if the request is invalid.
     """
+    logger.debug(f"Attempting to process request: {request}")
     # Parse the request.
     # Will raise parser.PluginParserError if the request is invalid.
-    request = parser.parse
+    parsed_request = parser.parse(request)
 
-    plugin_name = request["plugin"]
+    plugin_name = parsed_request["plugin"]
+    logger.debug(f"Request for plugin: {plugin_name}")
     for plugin in plugins:
         if plugin.spec["plugin"] == plugin_name:
+            logger.debug(f"Found spec for plugin: {plugin_name}. Running.")
             return plugin.run(**request["args"])
