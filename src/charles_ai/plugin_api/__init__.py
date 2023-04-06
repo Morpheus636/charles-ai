@@ -15,8 +15,9 @@ def get_plugin_specs():
     logging.debug("Getting all plugin specs")
     plugin_specs = []
     for plugin in plugins:
-        logger.debug(f"Found spec: {plugin.spec}")
+        logger.debug(f"Found spec: {plugin.spec} in module {plugin.__name__}")
         plugin_specs.append(plugin.spec)
+    return plugin_specs
 
 
 def process_request(request: str) -> str:
