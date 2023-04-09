@@ -4,7 +4,7 @@ from . import parser
 from .plugin_modules import plugin_datetime, plugin_weather
 
 
-plugins = [plugin_datetime, plugin_weather]
+plugins = [plugin_weather, plugin_datetime]
 
 
 logger = logging.getLogger(__name__)
@@ -36,5 +36,6 @@ def process_request(request: str) -> str:
     logger.debug(f"Request for plugin: {plugin_name}")
     for plugin in plugins:
         if plugin.spec["plugin"] == plugin_name:
-            logger.debug(f"Found spec for plugin: {plugin_name}. Running.")
-            return plugin.run(**request["args"])
+            logger.debug(f"Found spec for plugin: {plugin_name}.")
+            logger.info(f"Recieved request for plugin: {plugin_name}. Running.")
+            return plugin.run(**parsed_request["args"])
