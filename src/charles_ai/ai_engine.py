@@ -55,7 +55,6 @@ def ask(new_message: str) -> str:
     # Grab the most recent 10 items from the conversation history, if they exist.
     for message in conversation[-10:]:
         if message:
-            logger.warning("Adding message " + str(message))
             messages.append(message)
     if new_message:
         new_message_object = {"role": "user", "content": new_message}
