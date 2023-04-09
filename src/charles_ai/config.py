@@ -5,6 +5,7 @@ import dotenv
 
 
 ai_name = "Charles"
+units = "metric"
 
 
 def load():
@@ -31,3 +32,8 @@ def load():
     if env_ai_name:
         global ai_name
         ai_name = env_ai_name
+
+    env_units = os.getenv("UNITS")
+    if env_units:
+        global units
+        units = env_units
