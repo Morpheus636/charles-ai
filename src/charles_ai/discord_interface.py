@@ -62,7 +62,7 @@ async def on_message(message):
         # Reload command
         elif message.content.startswith("?reload"):
             ai_engine.setup()
-            message.reply("Reloaded AI engine.")
+            await message.reply("Reloaded AI engine.")
 
 
 @client.event
