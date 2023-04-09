@@ -12,3 +12,34 @@ The following must be defined within that module's global namespace:
 - `func` `run()`: The function to run when a request is made for the plugin.
   - Must accept `**kwargs` as defined in the `spec.args` dictionary.
   - Must return a string, which will be returned to the AI model as a system message.
+
+## Enabling Plugins
+Plugins are enabled by importing them and appending their namespace to `plugin_api.plugins` `within plugin_api/__init__.py`
+
+## Utilities Available to Plugins
+### Config
+Config should be handled via environment variables. To access them, use this code:
+```py
+import os
+
+os.getenv("YOUR_ENV_VAR_NAME")
+```
+
+The following commonly used config values are accessible via the config module:
+```py
+from ... import config
+
+config.units
+```
+
+
+### Logging
+Python's logging module should be used for logging within plugins. Use the following code to get a logger near the top of the plugin's module:
+
+```py
+import logging
+
+logger = logging.getLogger(__name__)
+```
+
+Then, use `logger.debug("")`, `logger.info("")`, `logger.warning("")`, `logger.error("")`, or `logger.critical("")` to log information.

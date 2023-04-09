@@ -1,7 +1,7 @@
 import logging
 
 from . import parser
-from .plugin_modules import plugin_datetime, plugin_weather
+from .plugin_modules import plugin_datetime, plugin_weather  # TODO - auto-import plugins.
 
 
 plugins = [plugin_weather, plugin_datetime]

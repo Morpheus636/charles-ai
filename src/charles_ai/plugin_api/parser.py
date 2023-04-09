@@ -17,8 +17,11 @@ def parse(request: str) -> dict:
     :rasies: PluginParserError - Raised if the request is invalid.
     """
     logger.debug("Attempting to parse request")
-    # Remove formatting.
-    request = request.removeprefix("```").removesuffix("```")
+    # Look for a plugin request in the message.
+    if "```" in request:
+        request = request.split("```")
+        logger.debug(request)
+        request = request[1]
 
     # Attempt to load the string with formatting removed as a JSON.
     try:
