@@ -27,12 +27,13 @@ def load():
 
     logging.basicConfig(level=log_level)
 
-    # Optional environment variables
+    # Optional env var - ai name override
     env_ai_name = os.getenv("AI_NAME")
     if env_ai_name:
         global ai_name
         ai_name = env_ai_name
 
+    # Optional env var - units (utility for plugins)
     env_units = os.getenv("UNITS")
     if env_units:
         global units

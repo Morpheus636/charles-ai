@@ -29,6 +29,7 @@ AI_USER_INFO'A system prompt for the AI explaining who you are. Keep this short 
 #### Optional Environment Variables
 ```
 AI_NAME='your_ai_name_here'
+UNITS='metric (default) or imperial'
 ```
 
 ## Contact
