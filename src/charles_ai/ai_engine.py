@@ -53,14 +53,16 @@ def ask(new_message: str) -> str:
     # Note that the user can also manually reset the history by adding a thumbs up reaction.
     messages = [system_instruction, user_info_prompt]
     # Grab the most recent 10 items from the conversation history, if they exist.
-    for i in range(0, 9):
-        index = len(conversation) - 1 - i
-        if index >= 0:
-            message = conversation[index]
-            if message:
-                messages.append(message)
-    messages.append({"role": "user", "content": new_message})
-    logger.debug(f"Sending API request with messages: {messages}")
+    for message in conversation[-10:]:
+        if message:
+            logger.warning("Adding message " + str(message))
+            messages.append(message)
+    if new_message:
+        new_message_object = {"role": "user", "content": new_message}
+        messages.append(new_message_object)
+        conversation.append(new_message_object)
+
+    logger.info(f"Sending API request with messages: {messages}")
 
     # OpenAI API request.
     api_response = openai.ChatCompletion.create(
@@ -71,9 +73,7 @@ def ask(new_message: str) -> str:
     # Save conversation history.
     # TODO - garbage-collect/remove old conversation history.
     response = api_response["choices"][0]["message"]["content"]
-    logger.debug(f"Receive response from API: {response}")
-    logger.debug("Saving message history to queue.")
-    conversation.append({"role": "user", "content": new_message})
+    logger.info(f"Receive response from API: {response}")
     conversation.append({"role": "assistant", "content": response})
 
     # Attempt to process the response as a plugin request, then recursively
@@ -82,7 +82,8 @@ def ask(new_message: str) -> str:
     # is not for the plugin API.
     try:
         logger.debug("Checking if request is for plugin API.")
-        return ask(plugin_api.process_request(response))
+        conversation.append({"role": "system", "content": plugin_api.process_request(response)})
+        return ask("")
     except plugin_api.parser.PluginParserError:
         logger.debug("Message not for plugin API.")
         return response
