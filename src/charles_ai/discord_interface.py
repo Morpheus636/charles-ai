@@ -59,6 +59,11 @@ async def on_message(message):
                 if msg.author == client.user:
                     await msg.delete()
 
+        # Reload command
+        elif message.content.startswith("?reload"):
+            ai_engine.setup()
+            message.reply("Reloaded AI engine.")
+
 
 @client.event
 async def on_reaction_add(reaction, user):
