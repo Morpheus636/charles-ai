@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 # Setup discord client
 intents = discord.Intents.default()
+intents.members = True
 intents.message_content = True
 client = discord.Client(intents=intents)
 
@@ -63,17 +64,20 @@ async def on_message(message):
 async def on_reaction_add(reaction, user):
     """Event handler for reactions to the bot."""
     # Ensure only authorized users can clear history.
+    logger.debug(
+        f"Received reaction {reaction.emoji} from user {user.id} in channel {reaction.message.channel.id}"
+    )
     if not user.id == int(os.getenv("ALLOWED_USER_ID")):
         return
 
     # Clear conversation log if the user reacts to a DM from the bot with :thumbsup:
     if (
         isinstance(reaction.message.channel, discord.DMChannel)
-        and reaction.message.author != client.user
+        and reaction.message.author == client.user
+        and reaction.emoji == "👍"
     ):
-        if reaction.emoji.name == "👍":
-            logger.debug("Received thumbsup reaction. Clearing queue.")
-            ai_engine.conversation = []
+        logger.info("Received thumbsup reaction. Clearing queue.")
+        ai_engine.conversation = []
 
 
 def start():
