@@ -21,7 +21,9 @@ def load():
         raise KeyError("Missing required environment variable: AI_USER_INFO")
 
     # Optional env var - Set log level
-    log_level = int(os.getenv("LOG_LEVEL"))
+    log_level = os.getenv("LOG_LEVEL")
+    if log_level:
+        log_level = int(log_level)
     if not log_level:
         log_level = 30
 
