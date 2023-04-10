@@ -1,3 +1,4 @@
+import logging
 import os
 
 import discord
@@ -5,8 +6,12 @@ import discord
 from . import ai_engine
 
 
+logger = logging.getLogger(__name__)
+
+
 # Setup discord client
 intents = discord.Intents.default()
+intents.members = True
 intents.message_content = True
 client = discord.Client(intents=intents)
 
@@ -14,6 +19,7 @@ client = discord.Client(intents=intents)
 @client.event
 async def on_ready():
     """Event handler for bot coming online. DMs the allowed user that it is ready."""
+    logger.info("Discord Interface Ready")
     user = await client.fetch_user(os.getenv("ALLOWED_USER_ID"))
     await user.send("Systems are now fully operational.")
 
@@ -34,6 +40,10 @@ async def on_message(message):
 
     # Only reply to DMs
     if isinstance(message.channel, discord.DMChannel):
+        logger.debug(
+            f"Received message: {message.content} from user: {message.author.id} in channel {message.channel.id}"
+        )
+
         # No prefix means it's not a command.
         if not message.content.startswith("?"):
             await message.reply(ai_engine.ask(message.content))
@@ -49,18 +59,30 @@ async def on_message(message):
                 if msg.author == client.user:
                     await msg.delete()
 
+        # Reload command
+        elif message.content.startswith("?reload"):
+            ai_engine.setup()
+            await message.reply("Reloaded AI engine.")
+
 
 @client.event
 async def on_reaction_add(reaction, user):
     """Event handler for reactions to the bot."""
     # Ensure only authorized users can clear history.
+    logger.debug(
+        f"Received reaction {reaction.emoji} from user {user.id} in channel {reaction.message.channel.id}"
+    )
     if not user.id == int(os.getenv("ALLOWED_USER_ID")):
         return
 
     # Clear conversation log if the user reacts to a DM from the bot with :thumbsup:
-    if isinstance(reaction.message.channel, discord.DMChannel) and reaction.message.author != client.user:
-        if reaction.emoji.name == "👍":
-            ai_engine.conversation = []
+    if (
+        isinstance(reaction.message.channel, discord.DMChannel)
+        and reaction.message.author == client.user
+        and reaction.emoji == "👍"
+    ):
+        logger.info("Received thumbsup reaction. Clearing queue.")
+        ai_engine.conversation = []
 
 
 def start():

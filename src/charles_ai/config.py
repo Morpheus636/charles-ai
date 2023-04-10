@@ -1,9 +1,11 @@
-import dotenv
-
+import logging
 import os
+
+import dotenv
 
 
 ai_name = "Charles"
+units = "metric"
 
 
 def load():
@@ -17,9 +19,24 @@ def load():
         raise KeyError("Missing required environment variable: ALLOWED_USER_ID")
     if not os.getenv("AI_USER_INFO"):
         raise KeyError("Missing required environment variable: AI_USER_INFO")
-        
-    # Optional environment variables
+
+    # Optional env var - Set log level
+    log_level = os.getenv("LOG_LEVEL")
+    if log_level:
+        log_level = int(log_level)
+    if not log_level:
+        log_level = 30
+
+    logging.basicConfig(level=log_level)
+
+    # Optional env var - ai name override
     env_ai_name = os.getenv("AI_NAME")
     if env_ai_name:
         global ai_name
         ai_name = env_ai_name
+
+    # Optional env var - units (utility for plugins)
+    env_units = os.getenv("UNITS")
+    if env_units:
+        global units
+        units = env_units
