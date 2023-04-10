@@ -5,7 +5,7 @@ spec = {
     "plugin": "datetime",
     "description": "Fetches the current date and time.",
     "args": {
-        "timezone_offset": "Signed integer representing the conversion from UTC to the requested timezone."
+        "timezone_offset": "Signed integer representing the conversion from UTC to the requested timezone measured in hours."
     },
 }
 
