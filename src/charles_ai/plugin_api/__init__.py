@@ -1,10 +1,14 @@
 import logging
 
 from . import parser
-from .plugin_modules import plugin_datetime, plugin_weather  # TODO - auto-import plugins.
+from .plugin_modules import (  # TODO - auto-import plugins.
+    plugin_datetime,
+    plugin_weather,
+    plugin_wikipedia,
+)
 
 
-plugins = [plugin_weather, plugin_datetime]
+plugins = [plugin_weather, plugin_datetime, plugin_wikipedia]
 
 
 logger = logging.getLogger(__name__)
