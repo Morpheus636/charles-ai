@@ -32,7 +32,7 @@ async def on_message(message):
         return
 
     # Ensure the bot only replies to authorized users.
-    if not message.author.id == int(os.getenv("ALLOWED_USER_ID")):
+    if isinstance(message.channel, discord.DMChannel) and message.author.id != int(os.getenv("ALLOWED_USER_ID")):
         await message.reply(
             "I am unable to assist you. If this is a mistake, you need to add your user ID in the `ALLOWED_USER_ID` environment variable on my server."
         )
